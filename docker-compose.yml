@@ -1,0 +1,57 @@
+version: '3'
+services:
+  quiz-api:
+    container_name: quiz-api
+    build:
+      context: ../quiz-app
+      dockerfile: Dockerfile
+    volumes:
+      - ../quiz-app:/usr/src/app
+    ports:
+      # syntax HOST_PORT:CONTAINER_PORT
+      - 53000:3000
+      - 59229:9229
+    command: npm run start:debug
+    networks:
+      - quiz_network
+
+  # -------------MONGO-DB-------------
+  quiz-mongo:
+    container_name: quiz-mongodb-local
+    image: mongo:latest
+    hostname: quiz-mongodb-local
+    ports:
+      - 57017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: quizRoot
+      MONGO_INITDB_ROOT_PASSWORD: Flamingo1
+      MONGO_INITDB_DATABASE: admin
+    volumes:
+      - quiz-mongodb:/data/db
+    command: mongod --auth --bind_ip_all
+    networks:
+      - quiz_network
+
+  # -------------MONGO-EXPRESS-------------
+  quiz-mongo-exp:
+    container_name: quiz-mongo-express-local
+    image: mongo-express:1.0.0-alpha.4
+    ports:
+      - 58081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: quizRoot
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Flamingo1
+      ME_CONFIG_MONGODB_SERVER: quiz-mongo
+      ME_CONFIG_BASICAUTH_USERNAME: quiz
+      ME_CONFIG_BASICAUTH_PASSWORD: Flamingo1
+    networks:
+      - quiz_network
+    depends_on:
+      - quiz-mongo
+
+networks:
+  quiz_network:
+
+volumes:
+  quiz-mongodb:
+    external: false
