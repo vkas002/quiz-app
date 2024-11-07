@@ -22,52 +22,147 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+# Quiz Application API
 
-```bash
-$ npm install
-```
+A simple RESTful API for creating quizzes, answering questions, and retrieving results. This application is built using **NestJS** and **MongoDB**, with Docker for containerization.
 
-## Running the app
+---
 
-```bash
-# development
-$ npm run start
+## Getting Started
 
-# watch mode
-$ npm run start:dev
+### Prerequisites
 
-# production mode
-$ npm run start:prod
-```
+Ensure you have the following installed:
+- Docker
+- Docker Compose
 
-## Test
+### Project Structure
 
-```bash
-# unit tests
-$ npm run test
+The project consists of the following containers:
+- **quiz-api**: The NestJS API for managing quizzes and responses.
+- **quiz-mongo**: MongoDB database to store quiz and result data.
+- **quiz-mongo-express**: A MongoDB admin interface.
 
-# e2e tests
-$ npm run test:e2e
+### Environment Configuration
 
-# test coverage
-$ npm run test:cov
-```
+The environment variables for MongoDB are set directly within the `docker-compose.yml` file. No additional `.env` file is required unless you wish to override these values.
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Running the Application
 
-## Stay in touch
+1. **Clone this repository** and navigate to the project root.
+2. Run the following command to start the Docker containers:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```bash
+   docker-compose up -d
 
-## License
+3. Once the containers are running, the API will be accessible at http://localhost:53000 and the MongoDB Express UI at http://localhost:58081.
 
-Nest is [MIT licensed](LICENSE).
+
+## API Endpoints
+1. Create Quiz
+Endpoint: POST /quiz
+
+Description: Creates a new quiz with questions and options.
+
+Sample Request:  
+{
+  "title": "General Knowledge Quiz",
+  "questions": [
+    {
+      "text": "Which planet is known as the Red Planet?",
+      "options": ["Earth", "Mars", "Jupiter", "Saturn"],
+      "correctOption": 1
+    },
+    {
+      "text": "What is the largest mammal?",
+      "options": ["Elephant", "Blue Whale", "Shark", "Giraffe"],
+      "correctOption": 1
+    }
+  ]
+}
+
+2. Get Quiz
+Endpoint: GET /quiz/:id
+
+Description: Fetches a quiz by its ID without revealing the correct answers.
+
+{
+  "_id": "quizId",
+  "title": "General Knowledge Quiz",
+  "questions": [
+    {
+      "_id": "questionId1",
+      "text": "Which planet is known as the Red Planet?",
+      "options": ["Earth", "Mars", "Jupiter", "Saturn"]
+    },
+    {
+      "_id": "questionId2",
+      "text": "What is the largest mammal?",
+      "options": ["Elephant", "Blue Whale", "Shark", "Giraffe"]
+    }
+  ]
+}
+
+3. Submit Answer
+Endpoint: POST /quiz/:quizId/answer
+
+Description: Submits an answer for a specific question and returns feedback.
+
+Sample Request:
+{
+  "userId": "user123",
+  "quizId": "quizId",
+  "questionId": "questionId1",
+  "selectedOption": 1
+}
+
+Sample Response:
+{
+  "correct": true,
+  "correctOption": 1
+}
+
+
+4. Get Results
+Endpoint: GET /quiz/:quizId/results?userId=user123
+
+Description: Retrieves the results of a quiz for a specific user.
+
+Sample Response:
+{
+  "quizId": "quizId",
+  "userId": "user123",
+  "score": 2,
+  "answers": [
+    {
+      "questionId": "questionId1",
+      "selectedOption": 1,
+      "isCorrect": true
+    },
+    {
+      "questionId": "questionId2",
+      "selectedOption": 2,
+      "isCorrect": false
+    }
+  ]
+}
+
+
+## Swagger API Documentation
+The API comes with integrated Swagger documentation. Access it by visiting: http://localhost:53000/api
+
+## Stopping the Application
+To stop the containers: docker-compose down
+
+
+
+
+
+
+
+
+
