@@ -21,9 +21,9 @@ export class QuizService {
 
   async createQuiz(createQuizDto: CreateQuizDto): Promise<Quiz> {
     const questions = await this.questionModel.insertMany(createQuizDto.questions);
-    const quiz = new this.quizModel({ title: createQuizDto.title, questions });
-    return quiz.save();
+    return this.quizModel.create({ title: createQuizDto.title, questions });
   }
+  
 
   async getQuizById(id: string): Promise<Quiz> {
     const quiz = await this.quizModel

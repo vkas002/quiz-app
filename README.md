@@ -67,7 +67,7 @@ The environment variables for MongoDB are set directly within the `docker-compos
 Endpoint: POST /quiz
 
 Description: Creates a new quiz with questions and options.
-
+    ```bash
 Sample Request:  
 {
   "title": "General Knowledge Quiz",
@@ -89,7 +89,7 @@ Sample Request:
 Endpoint: GET /quiz/:id
 
 Description: Fetches a quiz by its ID without revealing the correct answers.
-
+    ```bash
 {
   "_id": "quizId",
   "title": "General Knowledge Quiz",
@@ -111,6 +111,7 @@ Description: Fetches a quiz by its ID without revealing the correct answers.
 Endpoint: POST /quiz/:quizId/answer
 
 Description: Submits an answer for a specific question and returns feedback.
+    ```bash
 
 Sample Request:
 {
@@ -131,7 +132,7 @@ Sample Response:
 Endpoint: GET /quiz/:quizId/results?userId=user123
 
 Description: Retrieves the results of a quiz for a specific user.
-
+    ```bash
 Sample Response:
 {
   "quizId": "quizId",
@@ -155,12 +156,27 @@ Sample Response:
 ## Swagger API Documentation
 The API comes with integrated Swagger documentation. Access it by visiting: http://localhost:53000/api
 
+## Running Tests with Docker
+To execute test cases outside of the container, use the following command:
+    ```bash 
+  docker-compose up quiz-api-test
+
+To execute tests within the Docker container, you can use the following commands:
+
+1. Run all tests:
+   ```bash
+  docker-compose exec quiz-api npm run test
+
+2. Run tests in watch mode:
+  ```bash
+docker-compose exec quiz-api npm run test:watch
+
+3. Run specific test files:
+  ```bash
+docker-compose exec quiz-api npm run test src/quiz/quiz.service.integration.spec.ts
+
 ## Stopping the Application
 To stop the containers: docker-compose down
-
-
-
-
 
 
 

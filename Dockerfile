@@ -1,5 +1,5 @@
 # Use official NestJS image
-FROM node:18-alpine
+FROM node:18
 
 ARG NODE_ENV=dev
 ENV NODE_ENV=${NODE_ENV}

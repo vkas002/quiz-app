@@ -8,17 +8,32 @@ services:
     volumes:
       - ../quiz-app:/usr/src/app
     ports:
-      # syntax HOST_PORT:CONTAINER_PORT
       - 53000:3000
       - 59229:9229
     command: npm run start:debug
     networks:
       - quiz_network
+    depends_on:
+      - quiz-mongo
 
-  # -------------MONGO-DB-------------
+  # Service for running tests
+  quiz-api-test:
+    container_name: quiz-api-test
+    build:
+      context: ../quiz-app
+      dockerfile: Dockerfile
+    volumes:
+      - ../quiz-app:/usr/src/app
+    command: npm run test
+    networks:
+      - quiz_network
+    depends_on:
+      - quiz-mongo
+
+  # MongoDB Service
   quiz-mongo:
     container_name: quiz-mongodb-local
-    image: mongo:latest
+    image: mongo:latest # Non-Alpine MongoDB image
     hostname: quiz-mongodb-local
     ports:
       - 57017:27017
@@ -32,7 +47,7 @@ services:
     networks:
       - quiz_network
 
-  # -------------MONGO-EXPRESS-------------
+  # Mongo Express for MongoDB Management
   quiz-mongo-exp:
     container_name: quiz-mongo-express-local
     image: mongo-express:1.0.0-alpha.4

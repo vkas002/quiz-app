@@ -33,7 +33,7 @@ import { ApiBody } from '@nestjs/swagger';
       return quiz;
     }
   
-    @Post('submit')
+    @Post('/submit')
     @ApiBody({ type: SubmitAnswerDto })
     async submitAnswer(
       @Body() submitAnswerDto: SubmitAnswerDto,
