@@ -158,25 +158,27 @@ The API comes with integrated Swagger documentation. Access it by visiting: http
 
 ## Running Tests with Docker
 To execute test cases outside of the container, use the following command:
-
+```bash
   docker-compose up quiz-api-test
 
 To execute tests within the Docker container, you can use the following commands:
 
 1. Run all tests:
-   
+```bash
   docker-compose exec quiz-api npm run test
 
 2. Run tests in watch mode:
-  
+```bash  
   docker-compose exec quiz-api npm run test:watch
 
 3. Run specific test files:
-  
+```bash
   docker-compose exec quiz-api npm run test src/quiz/quiz.service.integration.spec.ts
 
 ## Stopping the Application
-To stop the containers: docker-compose down
+To stop the containers: 
+```bash
+docker-compose down
 
 
 
